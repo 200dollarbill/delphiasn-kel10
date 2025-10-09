@@ -1,12 +1,14 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-
-
+import os
+from data import loadedData
 #ini buat load data aja
 
 st.header("Load Data Page")
 st.write("halo")
+
+
 
 if st.button("Load Data", key="LOADDATAKEY"):
     df = pd.read_csv('kuliah/data/bidmc_03_Signals.csv')
@@ -17,6 +19,12 @@ if st.button("Load Data", key="LOADDATAKEY"):
     ax.set_ylabel('PLETH')
     ax.grid(True)
     st.pyplot(fig)
+
+
+    arr = [20,30,40]
+    st.text(loadedData.parse(arr))
+
+
 
 
 
