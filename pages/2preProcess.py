@@ -1,11 +1,9 @@
 import streamlit as st
 import os
-from shared import loadedData
-
-
-#ini buat plot data awal + baseline correction
+from deps import handler
 
 st.header("Page1 ")
-st.write("haloaadadad")
-var=[1,2,3]
-st.write(loadedData.parse(var))
+# st.write("udah ke load")
+rawdata = handler.load("rawdata")
+
+st.write(rawdata)
