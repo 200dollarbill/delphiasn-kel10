@@ -1,16 +1,14 @@
-import streamlit as st
 from dwt_coeff import DWTCoeff
 from deps import handler
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
-
-st.header("Page 2")
-st.write("mohon ditunggu soalnya lama")
-
-# const
 coeff = DWTCoeff()
+
+
+
+
 var = handler.load("rawdata")
 fs = 125
 ppgdata = var.value.to_numpy()
@@ -21,6 +19,8 @@ total = len(ppgdata)
 #print(var.value)
 w2fb = np.zeros((9, total))
 scalecount = 8
+
+
 
 # a trous algo
 for j in range(1,scalecount+1):
@@ -44,22 +44,21 @@ out_df = pd.DataFrame(out, index=var.time)
 print(out_df.head)
 
 for j in range(1, scalecount+1):
-    
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=time,
         y=w2fb[j],
         mode='lines',
-        line=dict(color='orange'),
+        line=dict(color='blue'),
         name=f'DWT Skala {j}'
     ))
     fig.add_trace(go.Scatter(
         x=time,
         y=ppgdata,
         mode='lines',
-        line=dict(color='blue'),
+        line=dict(color='red'),
         name='PPG Baseline',
-        opacity=0.6
+        opacity=0.4
     ))
     fig.update_layout(
         title=f"Hasil DWT Skala {j}",
@@ -70,8 +69,8 @@ for j in range(1, scalecount+1):
         legend=dict(x=0.01, y=0.99),
         margin=dict(t=50, b=40)
     )
-    st.write("Skala", j)
-    st.plotly_chart(fig)
+
+    fig.show()
 
 # var=coeff.get_filter(scale=2)
 # print(var)
