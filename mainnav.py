@@ -26,7 +26,7 @@ st.title('Kelompok 10 ')
 
 # setup page
 
-ldPage = st.Page("pages/1ldpage.py", title="Data Loading")
+ldPage = st.Page("pages/ldpage.py", title="Data Loading")
 preProcessPage = st.Page("pages/2preProcess.py", title="Pre Processing")
 DWTResultsPage = st.Page("pages/4dwtResults.py", title="DWT Results")
 dwtPage = st.Page("pages/3dwtFResponse.py", title="DWT Filter Response")

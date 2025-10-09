@@ -2,11 +2,18 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-from data import loadedData
 #ini buat load data aja
 
 st.header("Load Data Page")
 st.write("halo")
+
+class loadedData():
+    def __init__(self, data):
+        self.data = data
+
+    @staticmethod
+    def parse(data):
+        return data
 
 
 
