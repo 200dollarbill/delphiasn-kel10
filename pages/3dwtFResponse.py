@@ -11,25 +11,21 @@ from dwt_coeff import DWTCoeff
 
 
 
-NUM_SCALES_TO_ANALYZE = 8
+scalecount = 8
 FS = 125
-print("\n[1/3] Generating Delay Table...")
 delay_data = {
-    "Skala (j)": [],
-    "Delay T (sampel)": [],
-    "Delay dalam detik (T / fs)": []
+    "Skala j": [],
+    "Delay index": [],
+    "Delay dalam detik": []
 }
 
-for j in range(1, NUM_SCALES_TO_ANALYZE + 1):
+for j in range(1, scalecount + 1):
     T = round(2**(j-1)) - 1
-    delay_data["Skala (j)"].append(j)
-    delay_data["Delay T (sampel)"].append(T)
-    delay_data["Delay dalam detik (T / fs)"].append(T / FS)
+    delay_data["Skala j"].append(j)
+    delay_data["Delay index"].append(T)
+    delay_data["Delay dalam detik"].append(T / FS)
 
 df_delay = pd.DataFrame(delay_data)
-print("Tabel Delay Kompensasi (T):")
-st.write(df_delay.to_string(index=False))
-
 N_FFT = 2048 
 coeff_generator = DWTCoeff()
 g = coeff_generator.get_filter(scale=1) 
@@ -39,9 +35,9 @@ h = np.array([1, 3, 3, 1]) / 8.0
 Gw = np.abs(np.fft.rfft(g, N_FFT))
 Hw = np.abs(np.fft.rfft(h, N_FFT))
 freq_axis = np.fft.rfftfreq(N_FFT, 1/FS) 
-Q = np.zeros((NUM_SCALES_TO_ANALYZE + 1, len(freq_axis)))
+Q = np.zeros((scalecount + 1, len(freq_axis)))
 
-for j in range(1, NUM_SCALES_TO_ANALYZE + 1):
+for j in range(1, scalecount + 1):
     temp_Q = np.interp(freq_axis, freq_axis / (2**(j-1)), Gw)
     for k in range(j - 1):
         temp_Hw = np.interp(freq_axis, freq_axis / (2**k), Hw)
@@ -72,7 +68,7 @@ for j in range(1, NUM_SCALES_TO_ANALYZE + 1):
 
 fig = go.Figure()
 
-for j in range(1, NUM_SCALES_TO_ANALYZE + 1):
+for j in range(1, scalecount + 1):
     fig.add_trace(go.Scatter(
         x=freq_axis, 
         y=Q[j], 
@@ -93,7 +89,7 @@ fig.update_layout(
 
 st.plotly_chart(fig, use_container_width=True)
 
-for j in range(1, NUM_SCALES_TO_ANALYZE + 1):
+for j in range(1, scalecount + 1):
     fig.add_trace(go.Scatter(
         x=freq_axis, 
         y=Q[j], 
@@ -102,7 +98,7 @@ for j in range(1, NUM_SCALES_TO_ANALYZE + 1):
     ))
 
 range_data = []
-for j in range(1, NUM_SCALES_TO_ANALYZE + 1):
+for j in range(1, scalecount + 1):
     f_min = FS / (2**(j + 1))
     f_max = FS / (2**j)
     bandwidth = f_max - f_min
@@ -115,15 +111,7 @@ for j in range(1, NUM_SCALES_TO_ANALYZE + 1):
 
 df_range = pd.DataFrame(range_data)
 
-def highlight_skala_8(row):
-    return ['background-color: lightblue' if row.Skala == 8 else '' for _ in row]
-
-styled_df = df_range.style.apply(highlight_skala_8, axis=1).format({
-    "Frekuensi Minimum (Hz)": "{:.2f}",
-    "Frekuensi Maksimum (Hz)": "{:.2f}",
-    "Bandwidth (Hz)": "{:.2f}"
-})
-
+st.dataframe(df_delay)
 st.dataframe(df_range)
 
 
