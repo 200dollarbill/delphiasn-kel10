@@ -1,5 +1,3 @@
-# Save this file as dwt_coefficients.py
-
 import numpy as np
 
 class DWTCoeff:

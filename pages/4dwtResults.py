@@ -73,5 +73,7 @@ for j in range(1, scalecount+1):
     st.write("Skala", j)
     st.plotly_chart(fig)
 
+handler.save(time,w2fb[6],"dwt6")
+
 # var=coeff.get_filter(scale=2)
 # print(var)

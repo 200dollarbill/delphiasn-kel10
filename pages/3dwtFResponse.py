@@ -113,8 +113,3 @@ df_range = pd.DataFrame(range_data)
 
 st.dataframe(df_delay)
 st.dataframe(df_range)
-
-
-
-print("Rentang Frekuensi dan Bandwidth Teoritis Tiap Skala DWT:")
-print(df_range.to_string(index=False, float_format="%.2f"))
