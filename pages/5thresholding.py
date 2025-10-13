@@ -96,7 +96,7 @@ peak_threshold_percent = st.slider("Peak Detection Threshold (% of max amplitude
 # Detect peaks on the filtered signal
 idx_peaks, val_peaks = deteksi_puncak(filtered_dwt6, peak_threshold_percent)
 
-# Plot the filtered signal with detected peaks
+
 fig_peaks = go.Figure()
 fig_peaks.add_trace(go.Scatter(x=timedwt6, y=filtered_dwt6, mode='lines', name='Filtered Signal', line=dict(color='blue')))
 fig_peaks.add_trace(go.Scatter(x=[timedwt6[i] for i in idx_peaks], y=val_peaks, mode='markers', name='Detected Peaks', marker=dict(color='red', symbol='x', size=8)))
