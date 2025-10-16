@@ -105,5 +105,4 @@ st.plotly_chart(fig_peaks, use_container_width=True)
 
 st.write(f"**Total peaks detected:** {len(idx_peaks)}")
 
-# Calculate and display RR intervals table and BPM
 df_rr, rr_intervals, bpm_values = buat_tabel_rr_rrinterval(timedwt6, idx_peaks)

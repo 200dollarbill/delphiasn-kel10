@@ -6,4 +6,5 @@ st.header("Page1 ")
 # st.write("udah ke load")
 rawdata = handler.load("rawdata")
 
+
 st.write(rawdata)
