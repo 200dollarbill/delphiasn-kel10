@@ -4,7 +4,10 @@ from deps import handler
 
 st.header("Page1 ")
 # st.write("udah ke load")
-rawdata = handler.load("rawdata")
 
+# load pcg
+pcgraw = handler.load("rawdata")
+# load ecg
+ecgraw = handler.load("ecgraw")
 
-st.write(rawdata)
+st.write(pcgraw)
