@@ -11,7 +11,7 @@ st.write("mohon ditunggu soalnya lama")
 
 # const
 coeff = DWTCoeff()
-var = handler.load("rawdata")
+var = handler.load("rawdata1")
 fs = 125
 ppgdata = var.value.to_numpy()
 time = var.time.to_numpy()
@@ -47,14 +47,14 @@ for j in range(1, scalecount+1):
     
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=time,
+        x=time/50,
         y=w2fb[j],
         mode='lines',
         line=dict(color='orange'),
         name=f'DWT Skala {j}'
     ))
     fig.add_trace(go.Scatter(
-        x=time,
+        x=time/50,
         y=ppgdata,
         mode='lines',
         line=dict(color='blue'),
@@ -73,7 +73,7 @@ for j in range(1, scalecount+1):
     st.write("Skala", j)
     st.plotly_chart(fig)
 
-handler.save(time,w2fb[6],"dwt6")
+handler.save(time,w2fb[7],"dwt7")
 
 # var=coeff.get_filter(scale=2)
 # print(var)

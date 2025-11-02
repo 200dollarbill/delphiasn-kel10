@@ -12,15 +12,15 @@ st.write("halo")
 
 # button loading data bidmc
 if st.button("Load Data", key="LOADDATAKEY"):
-    df = pd.read_csv('ASN-Kel10/data/bidmc_03_Signals.csv')
+    df = pd.read_csv('../asn-csv/data/rafael-data.csv')
     fig, ax = plt.subplots()
-    ax.plot(df['Time [s]'], df[' PLETH'])
+    ax.plot(df['Index'], df['Amplitude (0-4096)'])
     ax.set_title('Data from CSV File')
     ax.set_xlabel('Time')
-    ax.set_ylabel('PLETH')
+    ax.set_ylabel('Data')
     ax.grid(True)
     st.pyplot(fig)
-    handler.save(df['Time [s]'], df[' PLETH'], "rawdata")
+    handler.save(df['Index'], df['Amplitude (0-4096)'], "rawdata1")
 
 
 

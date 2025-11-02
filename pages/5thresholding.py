@@ -55,12 +55,14 @@ def deteksi_puncak(sinyal, persen):
     return indeks, nilai
 
 def buat_tabel_rr_rrinterval(waktu, indeks):
+    waktu = waktu/50
+
     if len(indeks) < 2:
         return pd.DataFrame(), [], []
         
-    interval_detik = [float(waktu[indeks[i+1]] - waktu[indeks[i]]) for i in range(len(indeks)-1)]
-    bpm_per_beat = [60.0 / i for i in interval_detik if i > 0]
-    beat_labels = [f"{waktu[indeks[i]]:.2f} s → {waktu[indeks[i+1]]:.2f} s" for i in range(len(indeks)-1)]
+    interval_detik = [float((waktu[indeks[i+1]] - waktu[indeks[i]])) for i in range(len(indeks)-1)]
+    bpm_per_beat = [60/i for i in interval_detik if i > 0]
+    beat_labels = [f"{(waktu[indeks[i]]):.2f} s to {(waktu[indeks[i+1]]):.2f} s" for i in range(len(indeks)-1)]
 
     df = pd.DataFrame({
         "Beat Interval (waktu)": beat_labels,
@@ -106,3 +108,15 @@ st.plotly_chart(fig_peaks, use_container_width=True)
 st.write(f"**Total peaks detected:** {len(idx_peaks)}")
 
 df_rr, rr_intervals, bpm_values = buat_tabel_rr_rrinterval(timedwt6, idx_peaks)
+
+
+st.write(df_rr)
+
+
+print(len(df_rr))
+
+if st.button("Load Data", key="LOADDATAKEY"):
+    handler.save(df_rr['RR Interval (s)']/50, df_rr['Respiratory Rate (BPM)'], "savedTacho")
+
+# st.table(rr_intervals )
+
