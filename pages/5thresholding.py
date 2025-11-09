@@ -42,7 +42,7 @@ def moving_average_filter(signal, M):
 
 # --- NEW: Peak Detection and RR Interval Functions ---
 def deteksi_puncak(sinyal, persen):
-    maks = max(abs(x) for x in sinyal)
+    maks = max(abs(x) for x in sinyal)  
     batas = persen * maks
     indeks = []
     nilai = []
@@ -77,7 +77,7 @@ def buat_tabel_rr_rrinterval(waktu, indeks):
 
 # --- Implementation Section 1: MAV Filter ---
 st.markdown("### 1. Signal Filtering")
-M = 71 
+M = 60 
 st.write(f"Filter window size **M = {M}**")
 filtered_dwt6 = moving_average_filter(dwt6, M)
 
@@ -93,8 +93,7 @@ st.markdown("### 2. Peak Detection and Respiratory Rate Analysis")
 st.write("This section uses the **filtered signal** to detect peaks and calculate the respiratory rate.")
 
 # Interactive threshold for peak detection
-peak_threshold_percent = st.slider("Peak Detection Threshold (% of max amplitude)", 0.0, 1.0, 0.3, 0.05)
-
+peak_threshold_percent = 0
 # Detect peaks on the filtered signal
 idx_peaks, val_peaks = deteksi_puncak(filtered_dwt6, peak_threshold_percent)
 

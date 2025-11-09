@@ -21,19 +21,29 @@ It includes RR and HRV tachograms, key statistical metrics, and a Poincaré plot
 # -----------------------------------------------------------------------------
 try:
     # Load the saved data object
-    tacho_data = handler.load("savedTacho")
-    
+    tacho_data = handler.load("savedTachoData")
+    rdata = handler.load("rawdata")
+
+    timedata = rdata.time
     # Assign to clear variable names as per your description
     rr_intervals = np.array(tacho_data.value)/50
+    
+    for i in range(len(rr_intervals)):
+        if rr_intervals[i] > 5:
+            rr_intervals[i] = np.mean(rr_intervals)
+    
     hr_bpm = np.array(tacho_data.time)/50
 
-    # CRITICAL STEP: Create a time axis for the tachogram plots.
-    # This is the cumulative sum of the intervals, representing the time of each beat.
-    rr_time = np.cumsum(rr_intervals)
+    for i in range(len(hr_bpm)):
+        if hr_bpm[i] < 0.004:
+            hr_bpm[i] = np.mean(hr_bpm)
+
+    rr_time = np.cumsum(rr_intervals)*(3/16)
     # Start the time axis from the first interval's duration, not zero
     rr_time = np.insert(rr_time, 0, 0)[:-1]
     
 
+    # st.write(hr_bpm)
 
 except Exception as e:
     st.error(f"Could not load or process 'savedTacho' data. Please ensure the file exists and is in the correct format. Error: {e}")
@@ -58,7 +68,7 @@ else:
 st.subheader("Key HRV Statistics")
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Mean Heart Rate", f"{mean_hr:.2f} BPM")
-col2.metric("Mean RR Interval", f"{mean_rr:.2f} ms")
+col2.metric("Mean RR Interval", f"{mean_rr/5:.2f} ms")
 col3.metric("SDNN (Overall Variability)", f"{sdnn:.2f} ms")
 col4.metric("RMSSD (Short-term Variability)", f"{rmssd:.2f} ms")
 
@@ -86,7 +96,7 @@ with col_plots:
     fig2, ax2 = plt.subplots(figsize=(10, 4))
     # Ensure hr_bpm and rr_time have the same length for plotting
     plot_len = min(len(rr_time), len(hr_bpm))
-    ax2.plot(rr_time[:plot_len], hr_bpm[:plot_len], marker='o', linestyle='-', color='darkred')
+    ax2.plot(rr_time, hr_bpm[:plot_len]*50*60, marker='o', linestyle='-', color='darkred')
     ax2.set_title('HRV Tachogram (Beat-to-Beat HR)')
     ax2.set_xlabel('Time (s)')
     ax2.set_ylabel('Heart Rate (BPM)')
@@ -121,7 +131,7 @@ with col_poincare:
     ax3.add_patch(ellipse)
 
     # Plot the line of identity (y=x)
-    min_max = [min(rr_intervals), max(rr_intervals)]
+    min_max = [min(rr_intervals), max(rr_intervals)+3]
     ax3.plot(min_max, min_max, color='black', linestyle='--', label='Line of Identity')
 
     ax3.set_title('Poincaré Plot')

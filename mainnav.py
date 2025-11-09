@@ -32,13 +32,16 @@ DWTResultsPage = st.Page("pages/4dwtResults.py", title="DWT Results")
 dwtPage = st.Page("pages/3dwtFResponse.py", title="DWT Filter Response")
 thresholdingPage = st.Page("pages/5thresholding.py", title="Thresholding & Respiratory rate")
 peakDPage = st.Page("pages/6peakdet.py", title="Peak Detection")
-
+FDPage = st.Page("pages/7fdanalysis.py", title="Frequency Domain Analysis")
+hrvPage = st.Page("pages/8hrvanalysis.py", title="HRV Analysis")
+iPage = st.Page("pages/67ppgpeakdet.py", title="intermediate")
 
 dataLoadingPage = [ldPage, preProcessPage]
-processingPages = [DWTResultsPage, dwtPage, thresholdingPage, peakDPage]
+processingPages = [iPage, peakDPage, FDPage, hrvPage]
+brPages = [DWTResultsPage, dwtPage, thresholdingPage,]
 
 # nav page dictionary
-mainNavigation = st.navigation({"Load Data": dataLoadingPage, "Processing:": processingPages})
+mainNavigation = st.navigation({"Load Data": dataLoadingPage, "HR Analysis:": processingPages, "BR Analysis" : brPages})
 # pg1 = st.navigation({"Processing:": processingPages})
 # pg1.run()
 mainNavigation.run()
