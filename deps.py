@@ -26,11 +26,11 @@ class updater():
     @staticmethod
     def save(value, filename):
         dataobj = updater(value, filename)
-        with open(f"{filename}.dat", 'wb') as file:
+        with open(f"temp/{filename}.dat", 'wb') as file:
             pickle.dump(dataobj, file)
     @staticmethod
     def load(filename):
-        with open(f"{filename}.dat", 'rb') as file:
+        with open(f"temp/{filename}.dat", 'rb') as file:
             dataobj = pickle.load(file)
             return dataobj
     

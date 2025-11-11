@@ -32,11 +32,7 @@ uploaded_file = st.file_uploader(
 if st.button("Load and Process Data", key="LOAD_PROCESS_KEY"):
     if uploaded_file is not None:
         try:
-            # Read the uploaded CSV into a DataFrame
             df = pd.read_csv(uploaded_file)
-
-            # --- Data Validation ---
-            # Check for required columns
             required_columns = ['Index', 'Amplitude (0-4096)']
             if not all(col in df.columns for col in required_columns):
                 st.error(f"CSV must contain the following columns: {', '.join(required_columns)}")

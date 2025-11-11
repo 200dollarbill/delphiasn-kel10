@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 from scipy.fft import fft
 import os
 import pickle
-from deps import handler
+from deps import handler, updater
 
 # -----------------------------------------------------------------------------
 # Page Configuration and Title
@@ -139,13 +139,23 @@ if st.button("Generate Advanced Analysis Summary"):
         sub_col1, sub_col2 = st.columns(2)
         sub_col1.metric("SDNN", f"{interval_metrics['sdnn']:.2f} ms", help="Standard deviation of all intervals. Reflects overall variability.")
         sub_col2.metric("RMSSD", f"{interval_metrics['rmssd']:.2f} ms", help="Root mean square of successive differences. Reflects short-term, parasympathetic activity.")
+        updater.save(interval_metrics['sdnn'], "SDNN")
+        updater.save(interval_metrics['rmssd'], "RMSSD")
         with st.expander("Show more time-domain metrics..."):
             sub_col3, sub_col4, sub_col5 = st.columns(3)
             sub_col3.metric("NN50", f"{interval_metrics['nn50']}", help="Number of successive interval differences > 50 ms.")
             sub_col4.metric("pNN50", f"{interval_metrics['pnn50']:.2f} %", help="Percentage of NN50.")
             sub_col5.metric("SDSD", f"{interval_metrics['sdsd']:.2f} ms", help="Standard deviation of successive differences.")
+            updater.save(interval_metrics['nn50'], "nn50")
+            updater.save(interval_metrics['pnn50'], "pnn50")
+            updater.save(interval_metrics['sdsd'], "SDSD")
+
         st.info("**Non-Linear (Poincaré) Metrics**")
         p_col1, p_col2, p_col3 = st.columns(3)
         p_col1.metric("SD1", f"{interval_metrics['sd1']:.2f} ms", help="Represents short-term variability (width of Poincaré ellipse).")
         p_col2.metric("SD2", f"{interval_metrics['sd2']:.2f} ms", help="Represents long-term variability (length of Poincaré ellipse).")
         p_col3.metric("SD1/SD2 Ratio", f"{interval_metrics['sd_ratio']:.3f}")
+
+        updater.save(interval_metrics['sd1'], "sd1")
+        updater.save(interval_metrics['sd2'], "sd2")
+        updater.save(interval_metrics['sd_ratio'], "sdratio")

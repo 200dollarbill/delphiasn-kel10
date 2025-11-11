@@ -4,8 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 import matplotlib.transforms as transforms
-from deps import handler # Your data loading handler
-
+from deps import handler, updater
 # -----------------------------------------------------------------------------
 # Page Configuration and Title
 # -----------------------------------------------------------------------------
@@ -14,9 +13,10 @@ st.title("Breath Rate Variability ")
 
 
 try:
-    tacho_data = handler.load("savedDWT")
-    rdata = handler.load("rawdata")
-
+    tacho_data = handler.load("data/savedDWT")
+    rdata = handler.load("data/rawdata")
+    sd1 = updater.load("lfTP")
+    st.write(sd1.value)
     timedata = rdata.time
     rr_intervals = np.array(tacho_data.value)/50
     

@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 from scipy.fft import fft
 import os
 import pickle
-from deps import handler
+from deps import handler, updater
 
 # -----------------------------------------------------------------------------
 # Page Configuration and Title
@@ -126,6 +126,17 @@ if st.button("Load and Analyze Frequency Domain"):
             'HF_nu': (hf_power / total_power) * 100 if total_power > 0 else 0,
             'Peak_Freq_LF': peak_lf_freq, 'Peak_Freq_HF': peak_hf_freq,
         }
+        updater.save(total_power, "TP")
+        updater.save(lf_power, "lfTP")
+        updater.save(hf_power, "hfTP")
+        updater.save(peak_hf_freq, "peakHF")
+        updater.save(peak_lf_freq, "peakLF")
+        updater.save(lf_hf_ratio, "lfhfratio")
+        updater.save((lf_power / total_power) * 100 if total_power > 0 else 0, "lfNU")
+        updater.save((hf_power / total_power) * 100 if total_power > 0 else 0, "hfNU")
+        
+        
+        
         return freqs, psd * scaling_factor, features
 
     @st.cache_data
@@ -144,7 +155,7 @@ if st.button("Load and Analyze Frequency Domain"):
         "TP of HF (ms²/Hz)": features['TP_of_HF'], "LF/HF Ratio": features['LF_HF_Ratio'],
         "LF (n.u.)": features['LF_nu'], "HF (n.u.)": features['HF_nu'],
         "Peak Frequency of LF (Hz)": features['Peak_Freq_LF'],
-        "Peak Frequency of HF (Hz)": features['Peak_Freq_HF'], "SD1 (ms)": sd1_metric
+        "Peak Frequency of HF (Hz)": features['Peak_Freq_HF']
     }
     summary_df = pd.DataFrame.from_dict(summary_data, orient='index', columns=['Value'])
     summary_df.index.name = "Metric"
