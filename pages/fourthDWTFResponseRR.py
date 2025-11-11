@@ -11,10 +11,6 @@ from dwt_coeff import DWTCoeff
 
 
 var = DWTCoeff()
-st.write(var.get_filter(scale=8))
-
-
-
 
 scalecount = 8
 FS = 125

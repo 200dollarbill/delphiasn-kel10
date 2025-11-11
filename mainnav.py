@@ -26,19 +26,23 @@ st.title('Kelompok 10 ')
 
 # setup page
 
-ldPage = st.Page("pages/ldpage.py", title="Data Loading")
-preProcessPage = st.Page("pages/2preProcess.py", title="Pre Processing")
-DWTResultsPage = st.Page("pages/4dwtResults.py", title="DWT Results")
-dwtPage = st.Page("pages/3dwtFResponse.py", title="DWT Filter Response")
-thresholdingPage = st.Page("pages/5thresholding.py", title="Thresholding & Respiratory rate")
-peakDPage = st.Page("pages/6peakdet.py", title="Peak Detection")
-FDPage = st.Page("pages/7fdanalysis.py", title="Frequency Domain Analysis")
-hrvPage = st.Page("pages/8hrvanalysis.py", title="HRV Analysis")
-iPage = st.Page("pages/67ppgpeakdet.py", title="intermediate")
+firstpage = st.Page("pages/firstLoadPage.py", title="Data Loading")
+secondpage = st.Page("pages/secondProcessRR.py", title="Pre Processing")
+# br pages
+thirdpage = st.Page("pages/thirdDWTResultsRR.py", title="DWT Results")
+fourthpage = st.Page("pages/fourthDWTFResponseRR.py", title="DWT Filter Response")
+fifthpage = st.Page("pages/fifthThresholdingBR.py", title="Thresholding")
+ninthpage = st.Page("pages/ninthPeakDetBR.py", title="HR Peak Detection")
+tenthpage = st.Page("pages/tenthBRPMCalc.py", title="Breath Rate Calculation")
+# HR Analysis Pages
+sixthpage = st.Page("pages/sixthTachogramRR.py", title="RR Tachogram")
+seventhpage = st.Page("pages/seventFDAnalysisHRV.py", title="Frequency Domain Analysis")
+eightpage = st.Page("pages/eightIntervalHRV.py", title="Interval Variability")
 
-dataLoadingPage = [ldPage, preProcessPage]
-processingPages = [iPage, peakDPage, FDPage, hrvPage]
-brPages = [DWTResultsPage, dwtPage, thresholdingPage,]
+
+dataLoadingPage = [firstpage, secondpage]
+processingPages = [ninthpage, sixthpage, seventhpage, eightpage]
+brPages = [thirdpage, fourthpage, fifthpage,tenthpage]
 
 # nav page dictionary
 mainNavigation = st.navigation({"Load Data": dataLoadingPage, "HR Analysis:": processingPages, "BR Analysis" : brPages})

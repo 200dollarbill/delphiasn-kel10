@@ -18,10 +18,6 @@ total = len(dwt6)
 
 
 def moving_average_filter(signal, M):
-    """
-    Applies a two-pass moving average filter to the signal.
-    """
-    # First pass (causal)
     y1 = np.zeros_like(signal, dtype=float)
     for i in range(len(signal)):
         for j in range(M):
@@ -29,7 +25,6 @@ def moving_average_filter(signal, M):
                 y1[i] += signal[i - j]
         y1[i] /= M
 
-    # Second pass (non-causal, smoothing)
     y2 = np.zeros_like(y1, dtype=float)
     for i in range(len(y1)):
         for j in range(M):
@@ -39,8 +34,6 @@ def moving_average_filter(signal, M):
 
     return y2
 
-
-# --- NEW: Peak Detection and RR Interval Functions ---
 def deteksi_puncak(sinyal, persen):
     maks = max(abs(x) for x in sinyal)  
     batas = persen * maks
@@ -87,14 +80,10 @@ fig_filter.add_trace(go.Scatter(x=timedwt6, y=filtered_dwt6, mode='lines', name=
 fig_filter.update_layout(title_text='Comparison of Original and Moving Average Filtered Data', xaxis_title='Time / Index', yaxis_title='Amplitude', hovermode='x unified')
 st.plotly_chart(fig_filter, use_container_width=True)
 
-
-# --- Implementation Section 2: Peak Detection & RR Analysis ---
 st.markdown("### 2. Peak Detection and Respiratory Rate Analysis")
 st.write("This section uses the **filtered signal** to detect peaks and calculate the respiratory rate.")
 
-# Interactive threshold for peak detection
 peak_threshold_percent = 0
-# Detect peaks on the filtered signal
 idx_peaks, val_peaks = deteksi_puncak(filtered_dwt6, peak_threshold_percent)
 
 
@@ -107,15 +96,11 @@ st.plotly_chart(fig_peaks, use_container_width=True)
 st.write(f"**Total peaks detected:** {len(idx_peaks)}")
 
 df_rr, rr_intervals, bpm_values = buat_tabel_rr_rrinterval(timedwt6, idx_peaks)
-
-
 st.write(df_rr)
-
-
 print(len(df_rr))
 
 if st.button("Load Data", key="LOADDATAKEY"):
-    handler.save(df_rr['RR Interval (s)']/50, df_rr['Respiratory Rate (BPM)'], "savedTacho")
+    handler.save(df_rr['RR Interval (s)']/50, df_rr['Respiratory Rate (BPM)'], "savedDWT")
 
 # st.table(rr_intervals )
 

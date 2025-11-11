@@ -21,7 +21,7 @@ It includes RR and HRV tachograms, key statistical metrics, and a Poincaré plot
 # -----------------------------------------------------------------------------
 try:
     # Load the saved data object
-    tacho_data = handler.load("savedTachoData")
+    tacho_data = handler.load("savedDWT")
     rdata = handler.load("rawdata")
 
     timedata = rdata.time
@@ -49,19 +49,12 @@ except Exception as e:
     st.error(f"Could not load or process 'savedTacho' data. Please ensure the file exists and is in the correct format. Error: {e}")
     st.stop()
 
-# -----------------------------------------------------------------------------
-# Calculate Key HRV Metrics
-# -----------------------------------------------------------------------------
 if len(rr_intervals) > 1:
-    mean_rr = np.mean(rr_intervals) * 1000  # in ms
+    mean_rr = np.mean(rr_intervals) * 1000  
     mean_hr = (len(hr_bpm)/300)*60
-    
-    # SDNN: Standard deviation of all NN (RR) intervals. Reflects overall HRV.
-    sdnn = np.std(rr_intervals) * 1000 # in ms
-
-    # RMSSD: Root mean square of successive differences between RR intervals. Reflects short-term variability.
+    sdnn = np.std(rr_intervals) * 1000 
     diff_rr = np.diff(rr_intervals)
-    rmssd = np.sqrt(np.mean(diff_rr**2)) * 1000 # in ms
+    rmssd = np.sqrt(np.mean(diff_rr**2)) * 1000 
 else:
     mean_rr, mean_hr, sdnn, rmssd = [np.nan] * 4
 
@@ -74,17 +67,13 @@ col4.metric("RMSSD (Short-term Variability)", f"{rmssd:.2f} ms")
 
 st.markdown("---")
 
-# -----------------------------------------------------------------------------
-# Plotting Section
-# -----------------------------------------------------------------------------
 col_plots, col_poincare = st.columns([1, 1])
 
 with col_plots:
     st.subheader("Tachogram Plots")
 
-    # --- RR Tachogram ---
     fig1, ax1 = plt.subplots(figsize=(10, 4))
-    ax1.plot(rr_time, rr_intervals, marker='o', linestyle='-', color='green')
+    ax1.plot(rr_time, rr_intervals/5, marker='o', linestyle='-', color='green')
     ax1.set_title('RR Tachogram')
     ax1.set_xlabel('Time (s)')
     ax1.set_ylabel('RR Interval (s)')
@@ -106,24 +95,14 @@ with col_plots:
 
 with col_poincare:
     st.subheader("Poincaré Plot of RR Intervals")
-
-    # --- Poincaré Plot ---
     fig3, ax3 = plt.subplots(figsize=(8, 8))
     
-    # RR_i vs RR_i+1
     rr_i = rr_intervals[:-1]
     rr_i_plus_1 = rr_intervals[1:]
-
-    # Calculate SD1 and SD2 for the ellipse
-    # SD1: Standard deviation perpendicular to the line of identity (short-term variability)
-    # SD2: Standard deviation along the line of identity (long-term variability)
     sd1 = np.std(np.subtract(rr_i, rr_i_plus_1) / np.sqrt(2))
     sd2 = np.std(np.add(rr_i, rr_i_plus_1) / np.sqrt(2))
-    
-    # Plot the points
     ax3.scatter(rr_i, rr_i_plus_1, alpha=0.5, color='blue', label=f'RR intervals')
     
-    # Plot the ellipse
     center_x = np.mean(rr_i)
     center_y = np.mean(rr_i_plus_1)
     ellipse = Ellipse((center_x, center_y), width=2*sd2, height=2*sd1, angle=45,
