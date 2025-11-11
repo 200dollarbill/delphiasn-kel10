@@ -6,24 +6,15 @@ import plotly.graph_objects as go
 import os
 import pickle
 from deps import handler
-# --- End of Dummy handler module ---
-
-# -----------------------------------------------------------------------------
-# Page Configuration and Header
-# -----------------------------------------------------------------------------
 st.set_page_config(layout="wide")
 st.header("Page 4: Peak Detection and Interval Analysis")
 st.write("Load a data session, apply filters, detect peaks, and analyze respiratory rates.")
 
-# Initialize session state to hold analysis results
 if 'df_to_save' not in st.session_state:
     st.session_state.df_to_save = None
 if 'current_session_name' not in st.session_state:
     st.session_state.current_session_name = ""
 
-# -----------------------------------------------------------------------------
-# Section 1: Data Loading
-# -----------------------------------------------------------------------------
 st.subheader("1. Load Session Data")
 
 data_dir = "data"
@@ -70,21 +61,16 @@ if st.button("Load and Analyze Data", key="LOADANALYZEDATA"):
         session_name = os.path.splitext(selected_file)[0]
         var = handler.load(f"data/{session_name}")
         if var is not None:
-            # --- Perform all calculations here ---
             fs = 125
             analyzed = var.value
             analyzedtime = var.time
-            # Store results in session_state to persist them across reruns
             st.session_state.analyzed = analyzed
             st.session_state.analyzedtime = analyzedtime
             st.session_state.fs = fs
             st.session_state.current_session_name = session_name
-            st.session_state.df_to_save = None # Reset on new analysis
+            st.session_state.df_to_save = None 
             st.success(f"Successfully loaded data from `{selected_file}`. You can now adjust filters and detect peaks below.")
 
-# -----------------------------------------------------------------------------
-# Main analysis and display area - only shows if data is loaded
-    # -----------------------------------------------------------------------------
 
 analyzed = st.session_state.analyzed
 analyzedtime = st.session_state.analyzedtime
@@ -117,14 +103,8 @@ fig_peaks.add_trace(go.Scatter(x=analyzedtime[idx_peaks], y=val_peaks, mode='mar
 fig_peaks.update_layout(title='Detected Peaks on Filtered Signal', xaxis_title='Time / Index', yaxis_title='Amplitude', hovermode='x unified')
 st.plotly_chart(fig_peaks, use_container_width=True)
 st.info(f"**Total peaks detected:** {len(idx_peaks)}")
-
-# --- Calculate and store the final DataFrame for saving ---
 df_rr = buat_tabel_rr_rrinterval(analyzedtime, idx_peaks, fs)
 st.session_state.df_to_save = df_rr
-
-# -----------------------------------------------------------------------------
-# Section 4: Analysis and Saving (depends on session_state)
-# -----------------------------------------------------------------------------
 
 st.divider()
 st.subheader("4. Calculated Intervals and Rates")

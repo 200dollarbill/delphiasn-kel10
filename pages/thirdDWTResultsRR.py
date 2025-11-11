@@ -7,15 +7,9 @@ from dwt_coeff import DWTCoeff
 from deps import handler
 
 
-# -----------------------------------------------------------------------------
-# Page Configuration and Header
-# -----------------------------------------------------------------------------
 st.header("Page 2: DWT Analysis")
 st.write("Select a raw data session to perform a multi-scale Discrete Wavelet Transform (DWT) using the 'à trous' algorithm.")
 
-# -----------------------------------------------------------------------------
-# Data Loading Section
-# -----------------------------------------------------------------------------
 st.subheader("1. Select Data File")
 
 try:
@@ -39,8 +33,6 @@ def tes():
 
     if var is None:
         st.stop()
-
-    # Ensure loaded data is in a Pandas Series format for .to_numpy()
     valu = pd.Series(var.value)
     timu = pd.Series(var.time)
 

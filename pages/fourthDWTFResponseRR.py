@@ -74,7 +74,7 @@ for j in range(1, scalecount + 1):
         x=freq_axis, 
         y=Q[j], 
         mode='lines',
-        name=f"Skala {j}" # 'name' is used for the legend label
+        name=f"Skala {j}" 
     ))
 
 fig.update_layout(
@@ -95,7 +95,7 @@ for j in range(1, scalecount + 1):
         x=freq_axis, 
         y=Q[j], 
         mode='lines',
-        name=f"Skala {j}" # 'name' is used for the legend label
+        name=f"Skala {j}" 
     ))
 
 range_data = []

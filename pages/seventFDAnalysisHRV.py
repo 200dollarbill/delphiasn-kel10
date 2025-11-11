@@ -8,16 +8,10 @@ import os
 import pickle
 from deps import handler, updater
 
-# -----------------------------------------------------------------------------
-# Page Configuration and Title
-# -----------------------------------------------------------------------------
 st.set_page_config(page_title="FFT Analysis", layout="wide")
 st.title("Frequency Domain Analysis (RR-Interval PSD)")
 st.markdown("This page performs Power Spectral Density (PSD) estimation on the **RR-Interval series** to analyze its frequency components in standard $\\text{ms}^2/\\text{Hz}$ units.")
 
-# -----------------------------------------------------------------------------
-# Sidebar for User Controls (placed here to be always visible)
-# -----------------------------------------------------------------------------
 st.sidebar.header("FFT Analysis Controls")
 win_size = st.sidebar.slider("Window Size", 50, 500, 256, 1)
 overlap_percent = st.sidebar.slider("Overlap Percentage", 0, 90, 50, 5)
@@ -29,31 +23,19 @@ n_fft = st.sidebar.selectbox(
     index=3,
     help="Higher values increase frequency resolution (smoother plot)."
 )
-
-# -----------------------------------------------------------------------------
-# Data Loading Section with Text Inputs
-# -----------------------------------------------------------------------------
 st.subheader("1. Load Data Files")
 col1, col2 = st.columns(2)
 tacho_filename = col1.text_input("Enter Tachogram Data Filename:", "savedTachoData")
 raw_filename = col2.text_input("Enter Raw Data Filename:", "rawdata")
 
-# --- Button to trigger analysis ---
 if st.button("Load and Analyze Frequency Domain"):
     try:
-        # Load raw data (for preview) using the text input value
         ppg = handler.load(f"data/{raw_filename}")
         
-        # Load interval data (for FFT) using the text input value
         tacho_data = handler.load(f"data/{tacho_filename}")
 
-        # Stop if files failed to load
         if ppg is None or tacho_data is None:
             st.stop()
-
-        # =========================================================================
-        # ALL ORIGINAL DATA PREPARATION LOGIC IS PRESERVED BELOW
-        # =========================================================================
         fs_ppg = 50.0
         time_vector = np.array(ppg.time) / fs_ppg
         signal_values = np.array(ppg.value)
@@ -75,10 +57,6 @@ if st.button("Load and Analyze Frequency Domain"):
     except Exception as e:
         st.error(f"Failed to load necessary data. Error: {e}")
         st.stop()
-
-    # =========================================================================
-    # ALL ORIGINAL CALCULATION AND PLOTTING LOGIC IS PRESERVED BELOW
-    # =========================================================================
     @st.cache_data
     def run_full_fft_analysis(rr_intervals, fs_rr, window_size, overlap, n_fft):
         def hamming(N):

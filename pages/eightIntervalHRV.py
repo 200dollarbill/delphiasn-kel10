@@ -8,38 +8,21 @@ import os
 import pickle
 from deps import handler, updater
 
-# -----------------------------------------------------------------------------
-# Page Configuration and Title
-# -----------------------------------------------------------------------------
 st.set_page_config(page_title="Advanced HRV Analysis", layout="wide")
 st.title("Advanced Interval Variability Analysis")
-st.markdown("""
-This page provides a summary of advanced metrics derived from the signal, including time-domain stats, 
-non-linear (Poincaré) metrics, and a visual representation of the autonomic balance.
-""")
 
-# -----------------------------------------------------------------------------
-# Data Loading Section with Text Inputs
-# -----------------------------------------------------------------------------
 st.subheader("1. Load Data Files")
 col1, col2 = st.columns(2)
 tacho_filename = col1.text_input("Enter Tachogram Data Filename:", "savedTachoData")
 raw_filename = col2.text_input("Enter Raw Data Filename:", "rawdata")
 
-# --- Button to trigger analysis ---
 if st.button("Generate Advanced Analysis Summary"):
     try:
-        # Load data using the filenames from the text boxes
         ppg = handler.load(f"data/{raw_filename}")
         tacho_data = handler.load(f"data/{tacho_filename}")
-
-        # Stop if files failed to load
         if ppg is None or tacho_data is None:
             st.stop()
         
-        # =========================================================================
-        # ALL ORIGINAL DATA PREPARATION LOGIC IS PRESERVED BELOW
-        # =========================================================================
         fs = 50.0
         signal_values = np.array(ppg.value)
         rr_intervals_sec = np.array(tacho_data.time)
@@ -49,9 +32,6 @@ if st.button("Generate Advanced Analysis Summary"):
         st.error(f"Failed to load necessary data. Error: {e}")
         st.stop()
 
-    # =========================================================================
-    # ALL ORIGINAL CALCULATION AND PLOTTING LOGIC IS PRESERVED BELOW
-    # =========================================================================
     @st.cache_data
     def run_fft_for_features(signal, fs):
         window_size, overlap, n_fft = 256, 128, 2048
@@ -256,8 +236,6 @@ if st.button("Generate Advanced Analysis Summary"):
             n_col4, n_col5, _ = st.columns(3)
             n_col4.metric("CVSD", f"{interval_metrics['cvsd']:.2f} %", help="Coefficient of variation of successive differences (SDSD/MeanDiff).")
             n_col5.metric("Skewness", f"{interval_metrics['skewness']:.3f}", help="Skewness of the RR interval distribution.")
-            
-            # Add the corresponding updater calls
             updater.save(interval_metrics['hrv_ti'], "hrv_ti")
             updater.save(interval_metrics['tinn'], "tinn")
             updater.save(interval_metrics['cvnn'], "cvnn")

@@ -5,30 +5,24 @@ import os
 import pickle
 from deps import handler
 
-# --- Streamlit Page UI and Logic ---
 
 st.set_page_config(layout="wide")
-
-# Header and description based on the provided image
 st.title("Kelompok 10")
 st.header("Data Loading and Visualization")
 st.write("Upload a CSV file, visualize its contents, and save the session data.")
 
-# Session name input field
 session_name = st.text_input(
     "Enter a session name for the data",
     value="raw_data_session",
     help="This name will be used to save the processed data as a `.dat` file."
 )
 
-# File uploader
 uploaded_file = st.file_uploader(
     "Choose a CSV file",
     type="csv",
     help="Upload a CSV file with 'Index' and 'Amplitude (0-4096)' columns."
 )
 
-# Button to trigger the data loading and processing
 if st.button("Load and Process Data", key="LOAD_PROCESS_KEY"):
     if uploaded_file is not None:
         try:
@@ -39,7 +33,6 @@ if st.button("Load and Process Data", key="LOAD_PROCESS_KEY"):
             else:
                 st.info(f"Successfully loaded `{uploaded_file.name}` with {df.shape[0]} rows.")
 
-                # --- Visualization with Plotly ---
                 st.write("### Data Visualization")
                 fig = px.line(
                     df,
@@ -55,8 +48,6 @@ if st.button("Load and Process Data", key="LOAD_PROCESS_KEY"):
                 )
                 st.plotly_chart(fig, use_container_width=True)
 
-                # --- Save Data using Handler ---
-                # Save the data using the session name
                 handler.save(df['Index'], df['Amplitude (0-4096)'], f"data/{session_name}")
 
         except Exception as e:

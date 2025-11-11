@@ -8,10 +8,6 @@ import plotly.graph_objects as go
 import os
 import pickle
 from deps import handler, updater
-
-# -----------------------------------------------------------------------------
-# Page Configuration and Title
-# -----------------------------------------------------------------------------
 st.set_page_config(page_title="Tachogram Analysis", layout="wide")
 st.title("Heart Rate Variability (HRV) Tachograms")
 st.markdown("""
@@ -19,28 +15,19 @@ This page visualizes the beat-to-beat interval data derived from the PPG signal.
 It includes RR and HRV tachograms, key statistical metrics, and a Poincaré plot for analyzing the dynamics of heart rate variability.
 """)
 
-# -----------------------------------------------------------------------------
-# Data Loading Section with Text Inputs
-# -----------------------------------------------------------------------------
 st.subheader("1. Load Data Files")
 col1, col2 = st.columns(2)
 tacho_filename = col1.text_input("Enter Tachogram Data Filename:", "savedTachoData")
 raw_filename = col2.text_input("Enter Raw Data Filename:", "rawdata")
 
-# --- Button to trigger analysis ---
 if st.button("Load and Analyze Data"):
     try:
-        # Load the saved data object using the filenames from the text boxes
         tacho_data = handler.load(f"data/{tacho_filename}")
         rdata = handler.load(f"data/{raw_filename}")
 
-        # Stop if files failed to load
         if tacho_data is None or rdata is None:
             st.stop()
 
-        # =========================================================================
-        # ALL ORIGINAL CALCULATION LOGIC IS PRESERVED BELOW
-        # =========================================================================
         timedata = rdata.time
         rr_intervals = np.array(tacho_data.value)/50
         
@@ -62,17 +49,14 @@ if st.button("Load and Analyze Data"):
         st.stop()
 
     if len(rr_intervals) > 1:
-        mean_rr = np.mean(rr_intervals) * 1000  # in ms
+        mean_rr = np.mean(rr_intervals) * 1000 
         mean_hr = (len(hr_bpm)/300)*60
-        sdnn = np.std(rr_intervals) * 1000 # in ms
+        sdnn = np.std(rr_intervals) * 1000 
 
         diff_rr = np.diff(rr_intervals)
         rmssd = np.sqrt(np.mean(diff_rr**2)) * 1000 
     else:
         mean_rr, mean_hr, sdnn, rmssd = [np.nan] * 4
-    # =========================================================================
-    # END OF ORIGINAL CALCULATION LOGIC
-    # =========================================================================
 
     st.subheader("Key HRV Statistics")
     stat_col1, stat_col2, stat_col3, stat_col4 = st.columns(4)
@@ -87,14 +71,10 @@ if st.button("Load and Analyze Data"):
 
     with col_plots:
         st.subheader("Tachogram Plots (Plotly)")
-
-        # --- RR Tachogram (Converted to Plotly) ---
         fig1 = go.Figure()
         fig1.add_trace(go.Scatter(x=rr_time, y=rr_intervals/5, mode='lines+markers', name='RR Interval', line=dict(color='green')))
         fig1.update_layout(title='RR Tachogram', xaxis_title='Time (s)', yaxis_title='RR Interval (s)')
         st.plotly_chart(fig1, use_container_width=True)
-
-        # --- HRV (BPM) Tachogram (Converted to Plotly) ---
         fig2 = go.Figure()
         plot_len = min(len(rr_time), len(hr_bpm))
         fig2.add_trace(go.Scatter(x=rr_time[:plot_len], y=hr_bpm[:plot_len]*50*60, mode='lines+markers', name='HRV', line=dict(color='darkred')))
@@ -102,9 +82,6 @@ if st.button("Load and Analyze Data"):
         st.plotly_chart(fig2, use_container_width=True)
 
     with col_poincare:
-        # =========================================================================
-        # ORIGINAL POINCARÉ PLOT (MATPLOTLIB) IS PRESERVED
-        # =========================================================================
         st.subheader("Poincaré Plot of RR Intervals")
 
         fig3, ax3 = plt.subplots(figsize=(8, 8))
@@ -141,6 +118,3 @@ if st.button("Load and Analyze Data"):
         - **SD1 (Ellipse Width):** {sd1*1000:.2f} ms. Represents short-term HRV, primarily influenced by parasympathetic activity.
         - **SD2 (Ellipse Length):** {sd2*1000:.2f} ms. Represents long-term HRV, influenced by both sympathetic and parasympathetic activity.
         """)
-        # =========================================================================
-        # END OF ORIGINAL POINCARÉ PLOT
-        # =========================================================================

@@ -66,9 +66,6 @@ def buat_tabel_rr_rrinterval(waktu, indeks):
     df["RR Interval (s)"] = df["RR Interval (s)"].round(3)
     df["Respiratory Rate (BPM)"] = df["Respiratory Rate (BPM)"].round(2)
     return df, interval_detik, bpm_per_beat
-
-
-# --- Implementation Section 1: MAV Filter ---
 st.markdown("### 1. Signal Filtering")
 M = 60 
 st.write(f"Filter window size **M = {M}**")
