@@ -9,7 +9,7 @@ st.header("Page 4")
 st.write("Threshholding")
 
 # const
-var = handler.load("dwt6")
+var = handler.load("data/dwt6")
 fs = 125
 dwt6 = var.value
 timedwt6 = var.time
@@ -100,7 +100,7 @@ st.write(df_rr)
 print(len(df_rr))
 
 if st.button("Load Data", key="LOADDATAKEY"):
-    handler.save(df_rr['RR Interval (s)']/50, df_rr['Respiratory Rate (BPM)'], "savedDWT")
+    handler.save(df_rr['RR Interval (s)']/50, df_rr['Respiratory Rate (BPM)'], "data/savedDWT")
 
 # st.table(rr_intervals )
 

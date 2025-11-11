@@ -19,7 +19,7 @@ st.write("Select a raw data session to perform a multi-scale Discrete Wavelet Tr
 st.subheader("1. Select Data File")
 
 try:
-    available_files = [f for f in os.listdir('.') if f.endswith('.dat')]
+    available_files = [f for f in os.listdir('./data/') if f.endswith('.dat')]
 except FileNotFoundError:
     available_files = []
 
@@ -34,7 +34,7 @@ selected_file = st.selectbox(
 
 def tes():
     global valu, timu, session_name
-    session_name = os.path.splitext(selected_file)[0]
+    session_name = "data/"+os.path.splitext(selected_file)[0]
     var = handler.load(session_name)
 
     if var is None:
@@ -44,10 +44,6 @@ def tes():
     valu = pd.Series(var.value)
     timu = pd.Series(var.time)
 
-
-# =========================================================================
-# ORIGINAL CALCULATION LOGIC (UNCHANGED)
-# =========================================================================
 tes()
 coeff = DWTCoeff()
 ppgdata = valu.to_numpy()

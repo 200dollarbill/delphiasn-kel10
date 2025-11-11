@@ -7,7 +7,7 @@ import matplotlib.transforms as transforms
 import plotly.graph_objects as go
 import os
 import pickle
-from deps import handler
+from deps import handler, updater
 
 # -----------------------------------------------------------------------------
 # Page Configuration and Title
@@ -115,6 +115,8 @@ if st.button("Load and Analyze Data"):
         sd1 = np.std(np.subtract(rr_i, rr_i_plus_1) / np.sqrt(2))
         sd2 = np.std(np.add(rr_i, rr_i_plus_1) / np.sqrt(2))
         
+        updater.save(sd1, "sd1")
+        updater.save(sd2, "sd2")
         ax3.scatter(rr_i, rr_i_plus_1, alpha=0.5, color='blue', label=f'RR intervals')
         
         center_x = np.mean(rr_i)

@@ -43,6 +43,7 @@ if st.button("Generate Advanced Analysis Summary"):
         fs = 50.0
         signal_values = np.array(ppg.value)
         rr_intervals_sec = np.array(tacho_data.time)
+        #st.write(rr_intervals_sec)
 
     except Exception as e:
         st.error(f"Failed to load necessary data. Error: {e}")
@@ -81,22 +82,118 @@ if st.button("Generate Advanced Analysis Summary"):
             'LF_percent': (lf_power / (lf_power + hf_power)) * 100 if (lf_power + hf_power) > 0 else 0,
             'HF_percent': (hf_power / (lf_power + hf_power)) * 100 if (lf_power + hf_power) > 0 else 0
         }
+    
+
+    def hrv_triangular_index(rr_intervals, bin_width=8):
+        if len(rr_intervals) < 2:
+            return np.nan
+        hist, bin_edges = np.histogram(
+            rr_intervals, 
+            bins=np.arange(
+                np.min(rr_intervals), 
+                np.max(rr_intervals) + bin_width, 
+                bin_width
+            )
+        )
+        
+        N = len(rr_intervals)  
+        h_max = np.max(hist)   
+        
+        return N / h_max if h_max > 0 else np.nan
+
+
+    def tinn(rr_intervals, bin_width=8):
+        if len(rr_intervals) < 2:
+            return np.nan
+        
+        hist, bin_edges = np.histogram(
+            rr_intervals, 
+            bins=np.arange(
+                np.min(rr_intervals), 
+                np.max(rr_intervals) + bin_width, 
+                bin_width
+            )
+        )
+        
+        non_zero_indices = np.where(hist > 0)[0]
+        if len(non_zero_indices) < 2:
+            return np.nan
+        
+        left_idx = non_zero_indices[0]
+        right_idx = non_zero_indices[-1]
+        tinn_value = (right_idx - left_idx) * bin_width
+        
+        return tinn_value
+
+
+    def cvnn(rr_intervals):
+        if len(rr_intervals) < 2:
+            return np.nan
+        mean_rr = np.mean(rr_intervals)
+        std_rr = np.std(rr_intervals, ddof=1)
+        return (std_rr / mean_rr) * 100 if mean_rr > 0 else np.nan
+
+
+    def cvsd(rr_intervals,sdsd):
+        if len(rr_intervals) < 3:
+            return np.nan
+        
+        successive_diff = np.diff(rr_intervals)
+        mean_diff = np.mean(np.abs(successive_diff))
+        sdsd_value = sdsd
+        
+        if np.isnan(sdsd_value) or mean_diff == 0:
+            return np.nan
+        
+        return (sdsd_value / mean_diff) 
+
+
+    def skewness_nn(rr_intervals):
+        if len(rr_intervals) < 3:
+            return np.nan
+        
+        rr = np.array(rr_intervals)
+        N = len(rr)
+        
+        mean_rr = np.mean(rr)
+        
+        std_rr = np.std(rr, ddof=1)  
+        
+        if std_rr == 0:
+            return np.nan
+    
+        numerator = N * np.sum((rr - mean_rr) ** 3)
+        
+        denominator = (N - 1) * (N - 2) * (std_rr ** 3)
+        
+        if denominator == 0:
+            return np.nan
+        
+        skewness = numerator / denominator
+        
+        return skewness
 
     @st.cache_data
     def calculate_interval_metrics(rr_intervals):
         rr_ms = rr_intervals * 1000
         diffs = np.diff(rr_ms)
-        sdnn = np.std(rr_ms, ddof=1)
-        rmssd = np.sqrt(np.mean(diffs**2))
+        sdnn = np.std(rr_ms, ddof=1) 
+        rmssd = np.sqrt(np.mean(diffs**2)) 
         nn50 = np.sum(np.abs(diffs) > 50)
         pnn50 = (nn50 / len(diffs)) * 100 if len(diffs) > 0 else 0
-        sdsd = np.std(diffs, ddof=1)
+        sdsd = np.std(diffs, ddof=1) 
         sd1 = np.std(diffs) / np.sqrt(2)
         sd2 = np.sqrt(2 * np.std(rr_ms)**2 - 0.5 * np.std(diffs)**2)
+
         sd_ratio = sd1 / sd2 if sd2 > 0 else np.nan
         return {
             "sdnn": sdnn, "rmssd": rmssd, "nn50": nn50, "pnn50": pnn50, "sdsd": sdsd,
-            "sd1": sd1, "sd2": sd2, "sd_ratio": sd_ratio
+            "sd1": sd1, "sd2": sd2, "sd_ratio": sd_ratio,
+            "hrv_ti": hrv_triangular_index(rr_ms),
+            "tinn": tinn(rr_ms),
+            "cvnn": cvnn(rr_ms),
+            "cvsd": cvsd(rr_ms,sdsd),
+            "skewness": skewness_nn(rr_ms)
         }
 
     def plot_autonomic_balance_diagram(lf_percent, hf_percent):
@@ -149,6 +246,23 @@ if st.button("Generate Advanced Analysis Summary"):
             updater.save(interval_metrics['nn50'], "nn50")
             updater.save(interval_metrics['pnn50'], "pnn50")
             updater.save(interval_metrics['sdsd'], "SDSD")
+            st.write("---")
+            st.markdown("###### Geometric & Statistical Metrics")
+            n_col1, n_col2, n_col3 = st.columns(3)
+            n_col1.metric("HRV Triangular Index", f"{interval_metrics['hrv_ti']:.2f}", help="Total number of RR intervals divided by the peak height of the histogram.")
+            n_col2.metric("TINN", f"{interval_metrics['tinn']:.2f} ms", help="Baseline width of the RR interval histogram.")
+            n_col3.metric("CVNN", f"{interval_metrics['cvnn']:.2f} %", help="Coefficient of variation of NN intervals (SDNN/MeanNN).")
+            
+            n_col4, n_col5, _ = st.columns(3)
+            n_col4.metric("CVSD", f"{interval_metrics['cvsd']:.2f} %", help="Coefficient of variation of successive differences (SDSD/MeanDiff).")
+            n_col5.metric("Skewness", f"{interval_metrics['skewness']:.3f}", help="Skewness of the RR interval distribution.")
+            
+            # Add the corresponding updater calls
+            updater.save(interval_metrics['hrv_ti'], "hrv_ti")
+            updater.save(interval_metrics['tinn'], "tinn")
+            updater.save(interval_metrics['cvnn'], "cvnn")
+            updater.save(interval_metrics['cvsd'], "cvsd")
+            updater.save(interval_metrics['skewness'], "skewness")
 
         st.info("**Non-Linear (Poincaré) Metrics**")
         p_col1, p_col2, p_col3 = st.columns(3)
@@ -156,6 +270,6 @@ if st.button("Generate Advanced Analysis Summary"):
         p_col2.metric("SD2", f"{interval_metrics['sd2']:.2f} ms", help="Represents long-term variability (length of Poincaré ellipse).")
         p_col3.metric("SD1/SD2 Ratio", f"{interval_metrics['sd_ratio']:.3f}")
 
-        updater.save(interval_metrics['sd1'], "sd1")
-        updater.save(interval_metrics['sd2'], "sd2")
+        #updater.save(interval_metrics['sd1'], "sd1")
+        #updater.save(interval_metrics['sd2'], "sd2")
         updater.save(interval_metrics['sd_ratio'], "sdratio")
