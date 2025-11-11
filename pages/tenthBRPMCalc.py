@@ -9,23 +9,15 @@ from deps import handler # Your data loading handler
 # -----------------------------------------------------------------------------
 # Page Configuration and Title
 # -----------------------------------------------------------------------------
-st.set_page_config(page_title="Tachogram Analysis", layout="wide")
-st.title("Heart Rate Variability (HRV) Tachograms")
-st.markdown("""
-This page visualizes the beat-to-beat interval data derived from the PPG signal.
-It includes RR and HRV tachograms, key statistical metrics, and a Poincaré plot for analyzing the dynamics of heart rate variability.
-""")
+st.set_page_config(page_title="Breath Rate Analysis", layout="wide")
+st.title("Breath Rate Variability ")
 
-# -----------------------------------------------------------------------------
-# Data Loading and Processing
-# -----------------------------------------------------------------------------
+
 try:
-    # Load the saved data object
     tacho_data = handler.load("savedDWT")
     rdata = handler.load("rawdata")
 
     timedata = rdata.time
-    # Assign to clear variable names as per your description
     rr_intervals = np.array(tacho_data.value)/50
     
     for i in range(len(rr_intervals)):
@@ -39,31 +31,27 @@ try:
             hr_bpm[i] = np.mean(hr_bpm)
 
     rr_time = np.cumsum(rr_intervals)*(3/16)
-    # Start the time axis from the first interval's duration, not zero
     rr_time = np.insert(rr_time, 0, 0)[:-1]
     
-
-    # st.write(hr_bpm)
 
 except Exception as e:
     st.error(f"Could not load or process 'savedTacho' data. Please ensure the file exists and is in the correct format. Error: {e}")
     st.stop()
 
 if len(rr_intervals) > 1:
-    mean_rr = np.mean(rr_intervals) * 1000  
-    mean_hr = (len(hr_bpm)/300)*60
+    mean_interval = np.mean(rr_intervals) * 1000  
+    mean_br = (len(hr_bpm)/300)*60
     sdnn = np.std(rr_intervals) * 1000 
     diff_rr = np.diff(rr_intervals)
     rmssd = np.sqrt(np.mean(diff_rr**2)) * 1000 
 else:
-    mean_rr, mean_hr, sdnn, rmssd = [np.nan] * 4
+    mean_interval, mean_br, sdnn, rmssd = [np.nan] * 4
 
 st.subheader("Key HRV Statistics")
 col1, col2, col3, col4 = st.columns(4)
-col1.metric("Mean Heart Rate", f"{mean_hr:.2f} BPM")
-col2.metric("Mean RR Interval", f"{mean_rr/5:.2f} ms")
-col3.metric("SDNN (Overall Variability)", f"{sdnn:.2f} ms")
-col4.metric("RMSSD (Short-term Variability)", f"{rmssd:.2f} ms")
+col1.metric("Mean Breath Rate", f"{mean_br:.2f} BPM")
+col2.metric("Mean Breath Interval", f"{mean_interval/5:.2f} ms")
+
 
 st.markdown("---")
 
@@ -121,8 +109,4 @@ with col_poincare:
     ax3.legend()
     st.pyplot(fig3)
 
-    st.markdown(f"""
-    The Poincaré plot visualizes the correlation between consecutive RR intervals.
-    - **SD1 (Ellipse Width):** {sd1*1000:.2f} ms. Represents short-term HRV, primarily influenced by parasympathetic activity.
-    - **SD2 (Ellipse Length):** {sd2*1000:.2f} ms. Represents long-term HRV, influenced by both sympathetic and parasympathetic activity.
-    """)
+   

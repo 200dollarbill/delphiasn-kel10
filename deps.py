@@ -18,3 +18,19 @@ class handler():
         with open(f"{filename}.dat", 'rb') as file:
             dataobj = pickle.load(file)
             return dataobj
+
+class updater():
+    def __init__(self, value, filename):
+        self.value = value
+        self.filename = filename
+    @staticmethod
+    def save(value, filename):
+        dataobj = updater(value, filename)
+        with open(f"{filename}.dat", 'wb') as file:
+            pickle.dump(dataobj, file)
+    @staticmethod
+    def load(filename):
+        with open(f"{filename}.dat", 'rb') as file:
+            dataobj = pickle.load(file)
+            return dataobj
+    
