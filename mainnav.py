@@ -38,14 +38,16 @@ tenthpage = st.Page("pages/tenthBRPMCalc.py", title="Breath Rate Calculation")
 sixthpage = st.Page("pages/sixthTachogramRR.py", title="RR Tachogram")
 seventhpage = st.Page("pages/seventFDAnalysisHRV.py", title="Frequency Domain Analysis")
 eightpage = st.Page("pages/eightIntervalHRV.py", title="Interval Variability")
+eleventhpage = st.Page("pages/eleventhVasomotor.py", title="Vasomotor Frequency Analysis")
 
 
 dataLoadingPage = [firstpage, secondpage]
 processingPages = [ninthpage, sixthpage, seventhpage, eightpage]
 brPages = [thirdpage, fourthpage, fifthpage,tenthpage]
+vasoPages = [eleventhpage]
 
 # nav page dictionary
-mainNavigation = st.navigation({"Load Data": dataLoadingPage, "HR Analysis:": processingPages, "BR Analysis" : brPages})
+mainNavigation = st.navigation({"Load Data": dataLoadingPage, "HR Analysis:": processingPages, "BR Analysis" : brPages, "Vasomotor Analysis" : vasoPages})
 # pg1 = st.navigation({"Processing:": processingPages})
 # pg1.run()
 mainNavigation.run()

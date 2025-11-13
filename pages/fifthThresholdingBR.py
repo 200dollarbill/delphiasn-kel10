@@ -4,18 +4,27 @@ from deps import handler
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-
+import os
 st.header("Page 4")
 st.write("Threshholding")
 
+try:
+    available_files = [f for f in os.listdir('./data/') if f.endswith('.dat')]
+except FileNotFoundError:
+    available_files = []
+
+selected_file = st.selectbox(
+    "Select the data session to analyze:",
+    options=available_files
+)
+selected_file = selected_file.replace('.dat', '')
+
+var = handler.load(f"data/{selected_file}")
 # const
-var = handler.load("data/dwt6")
 fs = 125
 dwt6 = var.value
-timedwt6 = var.time
+timedwt6 = var.time / 50
 total = len(dwt6)
-
-
 
 def moving_average_filter(signal, M):
     y1 = np.zeros_like(signal, dtype=float)
@@ -96,7 +105,7 @@ df_rr, rr_intervals, bpm_values = buat_tabel_rr_rrinterval(timedwt6, idx_peaks)
 st.write(df_rr)
 print(len(df_rr))
 
-if st.button("Load Data", key="LOADDATAKEY"):
+if st.button("Save BR Calculations", key="LOADDATAKEY"):
     handler.save(df_rr['RR Interval (s)']/50, df_rr['Respiratory Rate (BPM)'], "data/savedDWT")
 
 # st.table(rr_intervals )

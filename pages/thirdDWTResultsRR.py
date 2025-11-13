@@ -69,9 +69,13 @@ save_filename = st.text_input("Enter filename for the DWT scale 8 results:", val
 
 dwt_results_df = pd.DataFrame({'time': time, 'value': w2fb[8]})
 
-if st.button("Save DWT Scale 8 Data"):
+if st.button("Save DWT Scale 6 Data For Breath Analysis"):
     tes()
+    dwt_results_df = pd.DataFrame({'time': time, 'value': w2fb[6]})
     handler.save(dwt_results_df['time'], dwt_results_df['value'], f"data/{save_filename}")
     st.success(f"Data saving process initiated for `{save_filename}.dat`.")
-if st.button("placeholder"):
-    pass
+if st.button("Save DWT Scale 8 Data For Vasomotor Analysis"):
+    tes()
+    dwt_results_df = pd.DataFrame({'time': time, 'value': w2fb[8]})
+    handler.save(dwt_results_df['time'], dwt_results_df['value'], f"data/{save_filename}")
+    st.success(f"Data saving process initiated for `{save_filename}.dat`.")

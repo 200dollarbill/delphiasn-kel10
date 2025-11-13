@@ -106,7 +106,7 @@ with tab1:
         with col1:
             st.metric("Total Samples", f"{N:,}")
         with col2:
-            dt = np.mean(np.diff(t))
+            dt = 0.02
             fs = 1.0 / dt
             st.metric("Sampling Rate", f"{fs:.2f} Hz")
         with col3:
@@ -572,7 +572,7 @@ with tab6:
                 with col3:
                     st.metric("Mean RR", f"{sum(rr_intervals) / len(rr_intervals):.1f} ms")
                 with col4:
-                    duration_sec = np.sum(rr_intervals) / 1000.0
+                    duration_sec = len(time_rr)
                     st.metric("Duration", f"{duration_sec:.1f} s")
                 
                 st.divider()
