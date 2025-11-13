@@ -7,8 +7,9 @@ import os
 import pickle
 from deps import handler
 st.set_page_config(layout="wide")
-st.header("Page 4: Peak Detection and Interval Analysis")
-st.write("Load a data session, apply filters, detect peaks, and analyze respiratory rates.")
+st.header("Section 2: Heart Rate Analysis")
+
+st.write("Load saved data from the first page")
 
 if 'df_to_save' not in st.session_state:
     st.session_state.df_to_save = None

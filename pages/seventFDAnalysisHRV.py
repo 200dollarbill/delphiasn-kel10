@@ -10,7 +10,7 @@ from deps import handler, updater
 
 st.set_page_config(page_title="FFT Analysis", layout="wide")
 st.title("Frequency Domain Analysis (RR-Interval PSD)")
-st.markdown("This page performs Power Spectral Density (PSD) estimation on the **RR-Interval series** to analyze its frequency components in standard $\\text{ms}^2/\\text{Hz}$ units.")
+st.markdown("Power Spectral Density (PSD)")
 
 st.sidebar.header("FFT Analysis Controls")
 win_size = st.sidebar.slider("Window Size", 50, 500, 256, 1)

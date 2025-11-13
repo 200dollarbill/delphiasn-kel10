@@ -9,7 +9,7 @@ import pickle
 from deps import handler, updater
 
 st.set_page_config(page_title="Advanced HRV Analysis", layout="wide")
-st.title("Advanced Interval Variability Analysis")
+st.title("Interval Variability Analysis")
 
 st.subheader("1. Load Data Files")
 col1, col2 = st.columns(2)

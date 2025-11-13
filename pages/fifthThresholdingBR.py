@@ -5,8 +5,6 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import os
-st.header("Page 4")
-st.write("Threshholding")
 
 try:
     available_files = [f for f in os.listdir('./data/') if f.endswith('.dat')]
@@ -19,6 +17,7 @@ selected_file = st.selectbox(
 )
 selected_file = selected_file.replace('.dat', '')
 
+st.markdown("---")
 var = handler.load(f"data/{selected_file}")
 # const
 fs = 125

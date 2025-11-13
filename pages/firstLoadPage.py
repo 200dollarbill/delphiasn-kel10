@@ -7,9 +7,9 @@ from deps import handler
 
 
 st.set_page_config(layout="wide")
-st.title("Kelompok 10")
-st.header("Data Loading and Visualization")
-st.write("Upload a CSV file, visualize its contents, and save the session data.")
+# st.title("Kelompok 10")
+st.header("Data Loading and Initial Visualization")
+# st.write("Accpets CSV")
 
 session_name = st.text_input(
     "Enter a session name for the data",
@@ -18,7 +18,7 @@ session_name = st.text_input(
 )
 
 uploaded_file = st.file_uploader(
-    "Choose a CSV file",
+    "CSV file",
     type="csv",
     help="Upload a CSV file with 'Index' and 'Amplitude (0-4096)' columns."
 )

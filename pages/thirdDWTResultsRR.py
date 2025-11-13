@@ -7,8 +7,8 @@ from dwt_coeff import DWTCoeff
 from deps import handler
 
 
-st.header("Page 2: DWT Analysis")
-st.write("Select a raw data session to perform a multi-scale Discrete Wavelet Transform (DWT) using the 'à trous' algorithm.")
+st.header("Section 3: Breath Rate Analysis")
+st.write("Select raw data to apply Discrete Wavelet Transform (DWT).")
 
 st.subheader("1. Select Data File")
 

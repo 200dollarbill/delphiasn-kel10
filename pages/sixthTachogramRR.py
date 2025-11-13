@@ -9,11 +9,8 @@ import os
 import pickle
 from deps import handler, updater
 st.set_page_config(page_title="Tachogram Analysis", layout="wide")
-st.title("Heart Rate Variability (HRV) Tachograms")
-st.markdown("""
-This page visualizes the beat-to-beat interval data derived from the PPG signal.
-It includes RR and HRV tachograms, key statistical metrics, and a Poincaré plot for analyzing the dynamics of heart rate variability.
-""")
+st.title("Heart Rate Variability (HRV) and Tachogram")
+st.markdown("This page visualizes the R-R interval from the PPG signal.")
 
 st.subheader("1. Load Data Files")
 col1, col2 = st.columns(2)
