@@ -66,13 +66,15 @@ metric_map = {
     "TP": "Total Power",
     "skewness": "Skewness",
     "maxVasoFreq":"Peak Vasometric Frequency",
-    "maxVasoMag" : "Peak Vasometric Magnitude"
+    "maxVasoMag" : "Peak Vasometric Magnitude",
+    "mean_br":"Mean Breath Rate",
+    "mean_hr":"Mean Heart Rate"
 }
 
 st.subheader("Time-Domain HRV Metrics")
 col_t1, col_t2, col_t3, col_t4 = st.columns(4)
 time_domain_cols = [col_t1, col_t2, col_t3, col_t4]
-time_domain_keys = ["cvsd", "hrv_ti", "nn50", "pnn50", "RMSSD", "sd1", "sd2", "SDNN", "sdratio", "SDSD", "tinn", "cvnn"]
+time_domain_keys = ["mean_hr", "mean_br","cvsd", "hrv_ti", "nn50", "pnn50", "RMSSD", "sd1", "sd2", "SDNN", "sdratio", "SDSD", "tinn", "cvnn"]
 
 for i, key in enumerate(time_domain_keys):
     col = time_domain_cols[i % 4]
@@ -82,6 +84,7 @@ for i, key in enumerate(time_domain_keys):
     unit = "ms" if key in ["cvsd", "RMSSD", "sd1", "sd2", "SDNN", "SDSD", "tinn"] else ""
     unit = " Count" if key == "nn50" else unit
     unit = "%" if key == "pnn50" else unit
+    unit = "BPM" if key in ["mean_hr", "mean_br"] else unit
     
     col.metric(display_name, f"{value:.2f}{unit}")
         

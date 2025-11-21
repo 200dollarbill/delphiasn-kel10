@@ -157,7 +157,10 @@ if st.button("Generate Advanced Analysis Summary"):
     def calculate_interval_metrics(rr_intervals):
         rr_ms = rr_intervals * 1000
         diffs = np.diff(rr_ms)
-        sdnn = np.std(rr_ms, ddof=1) 
+        # st.write(rr_ms)
+        rr_mean = np.mean(rr_ms)
+        square_diff = (rr_ms - rr_mean) **2
+        sdnn = np.sqrt(np.sum(square_diff) / (len(rr_intervals) - 1))    
         rmssd = np.sqrt(np.mean(diffs**2)) 
         nn50 = np.sum(np.abs(diffs) > 50)
         pnn50 = (nn50 / len(diffs)) * 100 if len(diffs) > 0 else 0

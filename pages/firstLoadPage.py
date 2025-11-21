@@ -23,7 +23,86 @@ uploaded_file = st.file_uploader(
     help="Upload a CSV file with 'Index' and 'Amplitude (0-4096)' columns."
 )
 
-if st.button("Load and Process Data", key="LOAD_PROCESS_KEY"):
+if st.button("Load Data Mas Davis", key="LOAD_DATA"):
+    df = pd.read_csv(uploaded_file)
+    df.columns = ['timestamp', 'red']
+    
+    df['timestamp'] = (df['timestamp'] - df['timestamp'].min()) / 1000000.0
+
+    t = df['timestamp'].values
+    x = df['red'].values
+    N = len(x)
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total Samples", f"{N:,}")
+    with col2:
+        dt = 0.02
+        fs = 1.0 / dt
+        st.metric("Sampling Rate", f"{fs:.2f} Hz")
+    with col3:
+        st.metric("Duration", f"{(t[-1]-t[0]):.2f} s")
+
+    st.write("### Data Visualization")
+    fig = px.line(
+        df,
+        x='timestamp',
+        y='red',
+        title='ECG Data Visualization',
+        labels={'timestamp': 'Index', 'red': 'Amplitude'}
+    )
+    fig.update_traces(line_color='#00A9FF')
+    fig.update_layout(
+        xaxis_title="Time",
+        yaxis_title="Data"
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    handler.save(df['timestamp'], df['red'], f"data/{session_name}")
+
+
+if st.button("Load Data Macro", key="LOAD_DATA_MACRO"):
+    df = pd.read_csv(uploaded_file)
+    df.columns = ['timestamp', 'red', 'ir']
+    
+    df['timestamp'] = (df['timestamp'] - df['timestamp'].min()) / 1000000.0
+
+    t = df['timestamp'].values
+    x = df['red'].values
+
+    N = len(x)
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total Samples", f"{N:,}")
+    with col2:
+        dt = 0.02
+        fs = 1.0 / dt
+        st.metric("Sampling Rate", f"{fs:.2f} Hz")
+    with col3:
+        st.metric("Duration", f"{(t[-1]-t[0]):.2f} s")
+
+    st.write("### Data Visualization")
+    fig = px.line(
+        df,
+        x='timestamp',
+        y='red',
+        title='ECG Data Visualization',
+        labels={'timestamp': 'Index', 'red': 'Amplitude'}
+    )
+    fig.update_traces(line_color='#00A9FF')
+    fig.update_layout(
+        xaxis_title="Time",
+        yaxis_title="Data"
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    handler.save(df['timestamp'], df['red'], f"data/{session_name}")
+
+
+
+
+if st.button("Load and Process Data (old)", key="LOAD_PROCESS_KEY"):
     if uploaded_file is not None:
         try:
             df = pd.read_csv(uploaded_file)

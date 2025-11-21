@@ -84,7 +84,7 @@ def main():
     
     # --- IMPORTANT ---
     # Change this variable to point to your CSV file
-    csv_filename = 'ddddfffa.csv' 
+    csv_filename = '/media/pingwalk/data/yep/Pythonvenv/venv2pleasefix/asn-csv/data/josh-data2.csv' 
     # ---------------
     
     try:
@@ -111,7 +111,7 @@ def main():
         cleaned_data = clean_sensor_data(original_data, max_val=4096)
         
         # 4. Save the cleaned data to a new file
-        output_csv_filename = 'cleaned_data.csv'
+        output_csv_filename = '/media/pingwalk/data/yep/Pythonvenv/venv2pleasefix/asn-csv/data/cleaned_data-josh.csv'
         print(f"Saving cleaned data to {output_csv_filename}...")
         
         # Rename columns back to original for saving

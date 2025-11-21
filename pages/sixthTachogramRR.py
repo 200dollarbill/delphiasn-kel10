@@ -64,6 +64,7 @@ if st.button("Load and Analyze Data"):
 
     st.markdown("---")
 
+    updater.save(mean_hr, "mean_hr")
     col_plots, col_poincare = st.columns([1, 1])
 
     with col_plots:
