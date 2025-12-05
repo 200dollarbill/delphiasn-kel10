@@ -112,5 +112,5 @@ for j in range(1, scalecount + 1):
 
 df_range = pd.DataFrame(range_data)
 
-st.dataframe(df_delay)
+# st.dataframe(df_delay)
 st.dataframe(df_range)
