@@ -104,8 +104,10 @@ df_rr, rr_intervals, bpm_values = buat_tabel_rr_rrinterval(timedwt6, idx_peaks)
 st.write(df_rr)
 print(len(df_rr))
 
+save_filename = st.text_input("Enter filename for the DWT scale 8 results:")
+
 if st.button("Save BR Calculations", key="LOADDATAKEY"):
-    handler.save(df_rr['RR Interval (s)']/50, df_rr['Respiratory Rate (BPM)'], "data/savedDWT")
+    handler.save(df_rr['RR Interval (s)']/50, df_rr['Respiratory Rate (BPM)'], f"data/{save_filename}")
 
 # st.table(rr_intervals )
 

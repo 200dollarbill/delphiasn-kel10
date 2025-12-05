@@ -40,12 +40,13 @@ seventhpage = st.Page("pages/seventFDAnalysisHRV.py", title="Frequency Domain An
 eightpage = st.Page("pages/eightIntervalHRV.py", title="Interval Variability")
 eleventhpage = st.Page("pages/eleventhVasomotor.py", title="Vasomotor Frequency Analysis")
 summarypage = st.Page("pages/twelvthSummary.py", title = "Conclusion")
+emdpage = st.Page("pages/thirteenthEMD.py")
 
 
 dataLoadingPage = [firstpage, secondpage]
 processingPages = [ninthpage, sixthpage, seventhpage, eightpage]
 brPages = [thirdpage, fourthpage, fifthpage,tenthpage]
-vasoPages = [eleventhpage]
+vasoPages = [eleventhpage, emdpage]
 finalPages = [summarypage]
 # nav page dictionary
 mainNavigation = st.navigation({"Load Data": dataLoadingPage, "HR Analysis:": processingPages, "BR Analysis" : brPages, "Vasomotor Analysis" : vasoPages, "Summary" : finalPages})

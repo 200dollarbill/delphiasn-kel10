@@ -7,6 +7,7 @@ from dwt_coeff import DWTCoeff
 from deps import handler
 
 
+st.set_page_config(layout="wide")
 st.header("Section 3: Breath Rate Analysis")
 st.write("Select raw data to apply Discrete Wavelet Transform (DWT).")
 
@@ -74,6 +75,13 @@ if st.button("Save DWT Scale 6 Data For Breath Analysis"):
     dwt_results_df = pd.DataFrame({'time': time, 'value': w2fb[6]})
     handler.save(dwt_results_df['time'], dwt_results_df['value'], f"data/{save_filename}")
     st.success(f"Data saving process initiated for `{save_filename}.dat`.")
+
+if st.button("Save DWT Scale 7 Data For Breath Rate Analysis"):
+    tes()
+    dwt_results_df = pd.DataFrame({'time': time, 'value': w2fb[7]})
+    handler.save(dwt_results_df['time'], dwt_results_df['value'], f"data/{save_filename}")
+    st.success(f"Data saving process initiated for `{save_filename}.dat`.")
+
 if st.button("Save DWT Scale 8 Data For Vasomotor Analysis"):
     tes()
     dwt_results_df = pd.DataFrame({'time': time, 'value': w2fb[8]})

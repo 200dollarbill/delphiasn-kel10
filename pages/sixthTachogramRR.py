@@ -46,7 +46,8 @@ if st.button("Load and Analyze Data"):
         st.stop()
 
     if len(rr_intervals) > 1:
-        mean_rr = np.mean(rr_intervals) * 1000 
+        mean_rr = np.mean(rr_intervals) * 1000
+        #st.write(1000/mean_rr) 
         mean_hr = (len(hr_bpm)/300)*60
         sdnn = np.std(rr_intervals) * 1000 
 

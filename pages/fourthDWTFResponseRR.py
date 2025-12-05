@@ -13,7 +13,7 @@ from dwt_coeff import DWTCoeff
 var = DWTCoeff()
 
 scalecount = 8
-FS = 125
+FS = 50
 delay_data = {
     "Skala j": [],
     "Delay index": [],

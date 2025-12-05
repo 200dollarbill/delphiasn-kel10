@@ -4,11 +4,24 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from deps import handler, updater
 import plotly.graph_objects as go
+import os 
 st.set_page_config(page_title="Breath Rate Analysis", layout="wide")
 st.title("Results:")
 
+try:
+    available_files = [f for f in os.listdir('./data/') if f.endswith('.dat')]
+except FileNotFoundError:
+    available_files = []
 
-tacho_data = handler.load("data/savedDWT")
+selected_file = st.selectbox(
+    "Select the data session to analyze:",
+    options=available_files
+)
+selected_file = selected_file.replace('.dat', '')
+
+st.write(selected_file)
+
+tacho_data = handler.load("data/" + selected_file)
 brdata = handler.load("data/final")
 timedata = brdata.time
 td2 = brdata.time
