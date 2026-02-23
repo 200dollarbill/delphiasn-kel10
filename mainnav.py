@@ -1,7 +1,7 @@
 import streamlit as st
 
 page_dict = {}
-st.title('Kelompok 10 ')
+st.title('PPG Analysis')
 
 # if "page" not in st.session_state:
 #     st.session_state.page = None
@@ -30,8 +30,8 @@ firstpage = st.Page("pages/firstLoadPage.py", title="Data Loading")
 secondpage = st.Page("pages/secondProcessRR.py", title="Pre Processing")
 # br pages
 thirdpage = st.Page("pages/thirdDWTResultsRR.py", title="DWT Results")
-fourthpage = st.Page("pages/fourthDWTFResponseRR.py", title="DWT Filter Response")
-fifthpage = st.Page("pages/fifthThresholdingBR.py", title="Thresholding")
+fourthhhhhh = st.Page("pages/fourthDWTFResponseRR.py", title="DWT Filter Response")
+fifth = st.Page("pages/fifthThresholdingBR.py", title="Thresholding")
 ninthpage = st.Page("pages/ninthPeakDetBR.py", title="HR Peak Detection")
 tenthpage = st.Page("pages/tenthBRPMCalc.py", title="Breath Rate Calculation")
 # HR Analysis Pages
@@ -45,7 +45,7 @@ emdpage = st.Page("pages/thirteenthEMD.py")
 
 dataLoadingPage = [firstpage, secondpage]
 processingPages = [ninthpage, sixthpage, seventhpage, eightpage]
-brPages = [thirdpage, fourthpage, fifthpage,tenthpage]
+brPages = [thirdpage, fourthhhhhh, fifth,tenthpage]
 vasoPages = [eleventhpage, emdpage]
 finalPages = [summarypage]
 # nav page dictionary
